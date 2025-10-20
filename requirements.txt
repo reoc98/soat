@@ -1,0 +1,30 @@
+# FastAPI and Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Database
+sqlalchemy==2.0.23
+asyncmy==0.2.10
+alembic==1.12.1
+
+# Data Validation
+pydantic==2.5.0
+pydantic-settings==2.1.0
+email-validator==2.1.0
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+# passlib[bcrypt]==1.7.4
+cryptography==41.0.7
+PyJWT==2.10.1
+boto3
+
+# AWS Services (optional)
+# aioboto3
+
+# HTTP Client
+httpx==0.25.2
+aiohttp==3.9.1
+requests==2.31.0
+xmltodict==1.0.2
