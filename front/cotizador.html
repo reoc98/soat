@@ -33,27 +33,39 @@
       </section>
 
       <section class="form__card">
-        <form id="cotizacion-form" class="form__grid">
+        <form id="cotizacion-form" class="form__grid" novalidate>
           <label class="input">
             <span>Placa del vehículo</span>
-            <input type="text" name="placa" placeholder="ABC123" required maxlength="6" />
+            <input
+              type="text"
+              name="placa"
+              placeholder="ABC123"
+              required
+              maxlength="6"
+              autocomplete="off"
+              inputmode="text"
+            />
           </label>
           <label class="input">
             <span>Tipo de documento</span>
-            <select name="documentType" required>
-              <option value="">Selecciona una opción</option>
-              <option value="cc">Cédula de ciudadanía</option>
-              <option value="ce">Cédula de extranjería</option>
-              <option value="nit">NIT</option>
-              <option value="ti">Tarjeta de identidad</option>
+            <select name="documentType" required disabled>
+              <option value="">Cargando tipos de documento…</option>
             </select>
           </label>
           <label class="input">
             <span>Número de documento</span>
-            <input type="text" name="documentNumber" placeholder="1234567890" required />
+            <input
+              type="text"
+              name="documentNumber"
+              placeholder="1234567890"
+              required
+              inputmode="numeric"
+              autocomplete="off"
+            />
           </label>
-          <button class="button button--primary" type="submit">Continuar</button>
+          <button class="button button--primary" type="submit">Cotizar</button>
         </form>
+        <div class="form__feedback" id="form-feedback" role="status" aria-live="polite"></div>
         <p class="form__disclaimer">
           Al continuar aceptas el tratamiento de tus datos conforme a nuestra política de privacidad.
         </p>
