@@ -289,11 +289,49 @@
     return value.toString().trim().toUpperCase();
   }
 
+  function formatCurrency(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+      return '$0';
+    }
+
+    return numeric.toLocaleString('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+  }
+
   function setTextContent(id, value) {
     const element = document.getElementById(id);
     if (element) {
       element.textContent = value || 'No disponible';
     }
+  }
+
+  function setPageLoading(isLoading, message = 'Generando tu cotización…') {
+    const overlay = document.getElementById('page-loader');
+    if (!overlay) return;
+
+    const messageElement = overlay.querySelector('.page-loader__message');
+    if (messageElement) {
+      messageElement.textContent = message;
+    }
+
+    overlay.hidden = !isLoading;
+    document.body.classList.toggle('is-loading', isLoading);
+  }
+
+  function setHomologationsDisabled(container, disabled) {
+    if (!container) return;
+
+    container.querySelectorAll('input[type="radio"]').forEach((input) => {
+      input.disabled = disabled;
+      if (input.parentElement) {
+        input.parentElement.classList.toggle('is-disabled', disabled);
+      }
+    });
   }
 
   function updateHomologationSelection(container) {
@@ -311,7 +349,7 @@
     });
   }
 
-  function renderHomologations(container, homologations = []) {
+  function renderHomologations(container, homologations = [], onSelect) {
     if (!container) return;
 
     container.innerHTML = '';
@@ -324,7 +362,7 @@
       return;
     }
 
-    homologations.forEach((item, index) => {
+    homologations.forEach((item) => {
       if (!item?.class_code) return;
 
       const card = document.createElement('label');
@@ -335,8 +373,12 @@
       input.name = 'homologation';
       input.value = item.class_code;
       input.required = true;
-      input.checked = index === 0;
-      input.addEventListener('change', () => updateHomologationSelection(container));
+      input.addEventListener('change', () => {
+        updateHomologationSelection(container);
+        if (typeof onSelect === 'function' && input.checked) {
+          onSelect(item, input);
+        }
+      });
 
       const title = document.createElement('span');
       title.className = 'homologation-card__title';
@@ -354,6 +396,192 @@
     });
 
     updateHomologationSelection(container);
+  }
+
+  function renderQuoteProducts(products = []) {
+    const section = document.getElementById('products-section');
+    const list = document.getElementById('products-list');
+    const highlight = document.getElementById('soat-highlight');
+    const priceElement = document.getElementById('soat-price');
+    const labelElement = document.getElementById('soat-plan-label');
+    const detailsElement = document.getElementById('soat-plan-details');
+
+    if (!section || !list || !highlight || !priceElement || !labelElement || !detailsElement) {
+      return;
+    }
+
+    list.innerHTML = '';
+    detailsElement.innerHTML = '';
+
+    if (!Array.isArray(products) || products.length === 0) {
+      section.hidden = true;
+      highlight.hidden = true;
+      labelElement.textContent = 'Selecciona una clase para ver tu tarifa.';
+      priceElement.textContent = '$0';
+      return;
+    }
+
+    section.hidden = false;
+
+    const soatProduct = products.find((product) => (product?.product_code || '').toUpperCase() === 'SOAT');
+    const soatPlan = soatProduct?.plans?.[0];
+    const soatTotal = soatPlan?.policy_total_value ?? soatPlan?.total_to_pay;
+
+    if (soatProduct && soatPlan && Number.isFinite(Number(soatTotal))) {
+      priceElement.textContent = formatCurrency(soatTotal);
+      labelElement.textContent = 'Valor total a pagar por tu SOAT';
+
+      const detailEntries = [
+        {
+          label: 'Periodo de vigencia',
+          value:
+            soatPlan.start_date && soatPlan.end_date
+              ? `${soatPlan.start_date} — ${soatPlan.end_date}`
+              : null,
+        },
+        {
+          label: 'Prima',
+          value: formatCurrency(soatPlan.premium_value),
+        },
+        {
+          label: 'Contribución ADRES',
+          value: formatCurrency(soatPlan.contribution_value),
+        },
+        {
+          label: 'Tasa RUNT',
+          value: formatCurrency(soatPlan.runt_fee),
+        },
+      ].filter((entry) => entry.value);
+
+      detailsElement.innerHTML = '';
+      detailEntries.forEach((entry) => {
+        const wrapper = document.createElement('div');
+        const dt = document.createElement('dt');
+        dt.textContent = entry.label;
+        const dd = document.createElement('dd');
+        dd.textContent = entry.value;
+        wrapper.appendChild(dt);
+        wrapper.appendChild(dd);
+        detailsElement.appendChild(wrapper);
+      });
+
+      highlight.hidden = false;
+    } else {
+      priceElement.textContent = '$0';
+      labelElement.textContent = 'Selecciona una clase para ver tu tarifa.';
+      highlight.hidden = true;
+    }
+
+    products.forEach((product) => {
+      if (!product) return;
+
+      const card = document.createElement('article');
+      card.className = 'product-card';
+      if (!product.mandatory) {
+        card.classList.add('product-card--optional');
+      }
+
+      const header = document.createElement('div');
+      header.className = 'product-card__header';
+
+      const title = document.createElement('h3');
+      title.className = 'product-card__title';
+      title.textContent = product.product_name || product.product_code || 'Producto';
+
+      const badge = document.createElement('span');
+      badge.className = 'product-card__badge';
+      badge.textContent = product.mandatory ? 'Incluido' : 'Opcional';
+
+      header.appendChild(title);
+      header.appendChild(badge);
+      card.appendChild(header);
+
+      const plansWrapper = document.createElement('div');
+      plansWrapper.className = 'product-card__plans';
+
+      if (Array.isArray(product.plans) && product.plans.length > 0) {
+        product.plans.forEach((plan) => {
+          const planElement = document.createElement('article');
+          planElement.className = 'product-plan';
+
+          const planTitle = document.createElement('h4');
+          planTitle.className = 'product-plan__title';
+          planTitle.textContent = plan.desc_type || plan.option_name || plan.code_type || 'Plan';
+
+          const meta = document.createElement('p');
+          meta.className = 'product-plan__meta';
+          if (plan.year_validity || plan.issue_date) {
+            const metaParts = [];
+            if (plan.year_validity) metaParts.push(`Vigencia ${plan.year_validity}`);
+            if (plan.issue_date) metaParts.push(`Expedición ${plan.issue_date}`);
+            meta.textContent = metaParts.join(' · ');
+          } else {
+            meta.textContent = product.product_code === 'SOAT' ? 'Cobertura obligatoria' : 'Cobertura adicional';
+          }
+
+          const stats = document.createElement('dl');
+          stats.className = 'product-plan__stats';
+
+          function addStat(label, value) {
+            if (!value && value !== 0) return;
+            const row = document.createElement('div');
+            const dt = document.createElement('dt');
+            dt.textContent = label;
+            const dd = document.createElement('dd');
+            dd.textContent = value;
+            row.appendChild(dt);
+            row.appendChild(dd);
+            stats.appendChild(row);
+          }
+
+          if ((product.product_code || '').toUpperCase() === 'SOAT') {
+            addStat('Total a pagar', formatCurrency(plan.total_to_pay ?? plan.policy_total_value));
+            addStat('Prima', formatCurrency(plan.premium_value));
+            addStat('Contribución', formatCurrency(plan.contribution_value));
+            addStat('RUNT', formatCurrency(plan.runt_fee));
+          } else if ((product.product_code || '').toUpperCase() === 'AP') {
+            const prices = plan.prices || {};
+            addStat('Valor asegurado', formatCurrency(prices.insured_value));
+            addStat('Prima', formatCurrency(prices.policy_value));
+            addStat('Asistencias', formatCurrency(prices.assistance_value));
+          } else {
+            addStat('Precio', formatCurrency(plan.policy_total_value || plan.total_to_pay));
+          }
+
+          planElement.appendChild(planTitle);
+          if (meta.textContent) {
+            planElement.appendChild(meta);
+          }
+          planElement.appendChild(stats);
+
+          plansWrapper.appendChild(planElement);
+        });
+      } else {
+        const emptyPlans = document.createElement('p');
+        emptyPlans.className = 'product-plan__meta';
+        emptyPlans.textContent = 'No encontramos planes asociados a este producto.';
+        plansWrapper.appendChild(emptyPlans);
+      }
+
+      card.appendChild(plansWrapper);
+
+      if (!product.mandatory) {
+        const toggle = document.createElement('label');
+        toggle.className = 'product-card__toggle';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = `product-${product.product_code || 'adicional'}`;
+        checkbox.value = product.product_code || '';
+        checkbox.checked = false;
+        const toggleText = document.createElement('span');
+        toggleText.textContent = 'Agregar a mi compra';
+        toggle.appendChild(checkbox);
+        toggle.appendChild(toggleText);
+        card.appendChild(toggle);
+      }
+
+      list.appendChild(card);
+    });
   }
 
   function initVehicleDetailPage() {
@@ -387,62 +615,57 @@
 
     const homologations = Array.isArray(vehicleInfo.homologations) ? vehicleInfo.homologations : [];
     const homologationContainer = document.getElementById('homologations-list');
-    renderHomologations(homologationContainer, homologations);
+    const feedbackId = 'quote-feedback';
 
-    const form = document.getElementById('quote-form');
-    const submitButton = form?.querySelector('button[type="submit"]');
+    renderQuoteProducts([]);
 
-    if (!form) {
+    if (!homologationContainer) {
+      showFeedback('No pudimos preparar la selección de clases para cotizar.', 'error', feedbackId);
       return;
     }
 
-    if (submitButton && homologations.length === 0) {
-      submitButton.disabled = true;
-      submitButton.textContent = 'Sin clases disponibles';
+    if (homologations.length === 0) {
+      renderHomologations(homologationContainer, homologations);
+      showFeedback('No encontramos clases disponibles para este vehículo. Vuelve al paso anterior.', 'error', feedbackId);
+      return;
     }
 
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
+    let quoteInProgress = false;
 
-      const selectedInput = form.querySelector('input[name="homologation"]:checked');
-      if (!selectedInput) {
-        showFeedback('Selecciona una clase para continuar con la cotización.', 'error', 'quote-feedback');
+    async function executeQuote(classCode) {
+      if (quoteInProgress) {
         return;
       }
 
-      const classCode = selectedInput.value;
       if (!classCode) {
-        showFeedback('Selecciona una clase válida para continuar.', 'error', 'quote-feedback');
+        showFeedback('Selecciona una clase válida para continuar.', 'error', feedbackId);
         return;
       }
 
       if (!validation.session_id) {
-        showFeedback('La sesión de cotización no es válida. Vuelve a ingresar tus datos.', 'error', 'quote-feedback');
+        showFeedback('La sesión de cotización no es válida. Vuelve a ingresar tus datos.', 'error', feedbackId);
         clearValidationResult();
         redirectToCotizador();
         return;
       }
 
-      if (submitButton) {
-        setButtonLoading(submitButton, true, 'Cotizando...');
-      }
-      showFeedback('Generando tu cotización…', 'info', 'quote-feedback');
+      quoteInProgress = true;
+      setPageLoading(true, 'Cotizando la clase seleccionada…');
+      setHomologationsDisabled(homologationContainer, true);
+      showFeedback('Cotizando la clase seleccionada…', 'info', feedbackId);
 
       try {
-        const response = await authorizedFetch(
-          QUOTE_CREATE_ENDPOINT,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              class_code: classCode,
-              products: ['SOAT', 'AP'],
-              session_id: validation.session_id,
-            }),
-          }
-        );
+        const response = await authorizedFetch(QUOTE_CREATE_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            class_code: classCode,
+            products: ['SOAT', 'AP'],
+            session_id: validation.session_id,
+          }),
+        });
 
         if (!response.ok) {
           const message = (await extractErrorMessage(response)) || 'No pudimos generar la cotización.';
@@ -450,17 +673,30 @@
         }
 
         const quote = await response.json().catch(() => ({}));
-        const successMessage = quote?.message || 'Cotización generada correctamente. Pronto te mostraremos más detalles.';
-        showFeedback(successMessage, 'success', 'quote-feedback');
+        renderQuoteProducts(Array.isArray(quote?.products) ? quote.products : []);
+        const successMessage = quote?.message || 'Cotización generada correctamente.';
+        showFeedback(successMessage, 'success', feedbackId);
       } catch (error) {
         console.error('Error al generar la cotización:', error);
-        showFeedback(error?.message || 'Ocurrió un problema al generar la cotización. Intenta nuevamente.', 'error', 'quote-feedback');
+        renderQuoteProducts([]);
+        showFeedback(error?.message || 'Ocurrió un problema al generar la cotización. Intenta nuevamente.', 'error', feedbackId);
       } finally {
-        if (submitButton) {
-          setButtonLoading(submitButton, false);
-        }
+        quoteInProgress = false;
+        setPageLoading(false);
+        setHomologationsDisabled(homologationContainer, false);
       }
+    }
+
+    renderHomologations(homologationContainer, homologations, (item) => {
+      if (!item?.class_code) return;
+      executeQuote(item.class_code);
     });
+
+    showFeedback(
+      'Selecciona la clase que mejor represente el uso de tu vehículo para generar la cotización.',
+      'info',
+      feedbackId
+    );
   }
 
   function initCotizadorForm() {

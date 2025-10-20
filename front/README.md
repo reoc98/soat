@@ -5,7 +5,7 @@ Este módulo contiene una imagen Docker ligera para servir la maqueta estática 
 Incluye tres vistas:
 - `index.html`: página de inicio con beneficios y llamado a la acción.
 - `cotizador.html`: formulario inicial que solicita placa, tipo y número de documento.
-- `detalle.html`: resumen del propietario y vehículo, selección de clase y generación de cotización.
+- `detalle.html`: resumen del propietario y vehículo con tarjetas estilizadas, selección de homologación y cotización automática que muestra los productos devueltos (SOAT destacado y AP opcional).
 
 ## Requisitos
 - [Docker](https://docs.docker.com/get-docker/) instalado localmente.
