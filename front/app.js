@@ -3,24 +3,29 @@
   const LOGIN_ENDPOINT = `${API_BASE_URL}/auth/login`;
   const DOCUMENT_TYPES_ENDPOINT = `${API_BASE_URL}/catalogs/document-types?active_only=true`;
   const OWNER_VALIDATION_ENDPOINT = `${API_BASE_URL}/owner-validation/validate`;
+  const QUOTE_CREATE_ENDPOINT = `${API_BASE_URL}/quote/create/`;
   const LOGIN_CREDENTIALS = {
     email: 'test@rappi.com',
     password: 'tempralPass123',
   };
 
   const START_ACTION_SELECTOR = '[data-action="start"]';
+  const STORAGE_KEYS = {
+    AUTH_TOKEN: 'authToken',
+    VALIDATION_RESULT: 'validationResult',
+  };
 
-  let authToken = sessionStorage.getItem('authToken') || null;
+  let authToken = sessionStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) || null;
   const documentTypeMap = new Map();
 
   function storeToken(token) {
     authToken = token;
-    sessionStorage.setItem('authToken', token);
+    sessionStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
   }
 
   function clearToken() {
     authToken = null;
-    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
   }
 
   async function login() {
@@ -119,8 +124,8 @@
     }
   }
 
-  function showFeedback(message = '', type = 'info') {
-    const feedback = document.getElementById('form-feedback');
+  function showFeedback(message = '', type = 'info', targetId = 'form-feedback') {
+    const feedback = document.getElementById(targetId);
     if (!feedback) return;
 
     if (!message) {
@@ -187,7 +192,7 @@
 
       documentTypes.forEach((type) => {
         if (!type?.soat_code || !type?.name) return;
-        documentTypeMap.set(type.soat_code, type.name);
+        documentTypeMap.set(type.soat_code, type);
 
         const option = document.createElement('option');
         option.value = type.soat_code;
@@ -231,9 +236,238 @@
     return (value || '').toString().trim();
   }
 
+  function persistValidationResult(data, context = {}) {
+    if (!data || typeof data !== 'object') return;
+
+    const payload = {
+      is_owner: data.is_owner ?? null,
+      message: data.message ?? '',
+      owner_info: data.owner_info || null,
+      vehicle_info: data.vehicle_info || null,
+      session_id: data.session_id || null,
+      context: {
+        documentLabel: context.documentLabel || null,
+        documentTypeCode: context.documentTypeCode || null,
+        documentNumber: context.documentNumber || null,
+        licensePlate: context.licensePlate || null,
+      },
+    };
+
+    sessionStorage.setItem(STORAGE_KEYS.VALIDATION_RESULT, JSON.stringify(payload));
+  }
+
+  function loadValidationResult() {
+    const raw = sessionStorage.getItem(STORAGE_KEYS.VALIDATION_RESULT);
+    if (!raw) return null;
+
+    try {
+      return JSON.parse(raw);
+    } catch (error) {
+      console.warn('No se pudo interpretar la validación almacenada:', error);
+      return null;
+    }
+  }
+
+  function clearValidationResult() {
+    sessionStorage.removeItem(STORAGE_KEYS.VALIDATION_RESULT);
+  }
+
+  function redirectToCotizador() {
+    window.location.replace('cotizador.html');
+  }
+
+  function formatCylinderCapacity(value) {
+    const numeric = Number(value);
+    if (Number.isFinite(numeric) && numeric > 0) {
+      return `${numeric.toLocaleString('es-CO')} cc`;
+    }
+    return 'No disponible';
+  }
+
+  function formatFuelType(value) {
+    if (!value) return 'No disponible';
+    return value.toString().trim().toUpperCase();
+  }
+
+  function setTextContent(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.textContent = value || 'No disponible';
+    }
+  }
+
+  function updateHomologationSelection(container) {
+    const cards = container?.querySelectorAll('.homologation-card');
+    if (!cards) return;
+
+    cards.forEach((card) => {
+      const input = card.querySelector('input[type="radio"]');
+      if (!input) return;
+      if (input.checked) {
+        card.classList.add('homologation-card--selected');
+      } else {
+        card.classList.remove('homologation-card--selected');
+      }
+    });
+  }
+
+  function renderHomologations(container, homologations = []) {
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (!Array.isArray(homologations) || homologations.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-state';
+      empty.textContent = 'No encontramos clases disponibles para cotizar este vehículo.';
+      container.appendChild(empty);
+      return;
+    }
+
+    homologations.forEach((item, index) => {
+      if (!item?.class_code) return;
+
+      const card = document.createElement('label');
+      card.className = 'homologation-card';
+
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'homologation';
+      input.value = item.class_code;
+      input.required = true;
+      input.checked = index === 0;
+      input.addEventListener('change', () => updateHomologationSelection(container));
+
+      const title = document.createElement('span');
+      title.className = 'homologation-card__title';
+      title.textContent = item.class_description || `Clase ${item.class_code}`;
+
+      const code = document.createElement('span');
+      code.className = 'homologation-card__code';
+      code.textContent = `Código ${item.class_code}`;
+
+      card.appendChild(input);
+      card.appendChild(title);
+      card.appendChild(code);
+
+      container.appendChild(card);
+    });
+
+    updateHomologationSelection(container);
+  }
+
+  function initVehicleDetailPage() {
+    const page = document.querySelector('[data-page="vehicle-detail"]');
+    if (!page) return;
+
+    const validation = loadValidationResult();
+    const vehicleInfo = validation?.vehicle_info;
+    const ownerInfo = validation?.owner_info;
+    const context = validation?.context || {};
+
+    if (!validation || !vehicleInfo || !validation.session_id) {
+      redirectToCotizador();
+      return;
+    }
+
+    const message = validation.message || 'Selecciona la clase adecuada para continuar con la cotización.';
+    setTextContent('validation-message', message);
+    setTextContent('owner-full-name', ownerInfo?.full_name || [ownerInfo?.first_name, ownerInfo?.last_name, ownerInfo?.second_last_name]
+      .filter(Boolean)
+      .join(' '));
+    setTextContent('owner-document', context.documentNumber || ownerInfo?.document_number);
+    setTextContent('owner-document-type', context.documentLabel || ownerInfo?.document_type);
+
+    setTextContent('vehicle-brand', vehicleInfo.brand);
+    setTextContent('vehicle-plate', (context.licensePlate || vehicleInfo.license_plate || '').toString().toUpperCase());
+    setTextContent('vehicle-model', vehicleInfo.year || 'No disponible');
+    setTextContent('vehicle-line', vehicleInfo.model);
+    setTextContent('vehicle-cylinder', formatCylinderCapacity(vehicleInfo.cylinder_capacity));
+    setTextContent('vehicle-fuel', formatFuelType(vehicleInfo.fuel_type));
+
+    const homologations = Array.isArray(vehicleInfo.homologations) ? vehicleInfo.homologations : [];
+    const homologationContainer = document.getElementById('homologations-list');
+    renderHomologations(homologationContainer, homologations);
+
+    const form = document.getElementById('quote-form');
+    const submitButton = form?.querySelector('button[type="submit"]');
+
+    if (!form) {
+      return;
+    }
+
+    if (submitButton && homologations.length === 0) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sin clases disponibles';
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const selectedInput = form.querySelector('input[name="homologation"]:checked');
+      if (!selectedInput) {
+        showFeedback('Selecciona una clase para continuar con la cotización.', 'error', 'quote-feedback');
+        return;
+      }
+
+      const classCode = selectedInput.value;
+      if (!classCode) {
+        showFeedback('Selecciona una clase válida para continuar.', 'error', 'quote-feedback');
+        return;
+      }
+
+      if (!validation.session_id) {
+        showFeedback('La sesión de cotización no es válida. Vuelve a ingresar tus datos.', 'error', 'quote-feedback');
+        clearValidationResult();
+        redirectToCotizador();
+        return;
+      }
+
+      if (submitButton) {
+        setButtonLoading(submitButton, true, 'Cotizando...');
+      }
+      showFeedback('Generando tu cotización…', 'info', 'quote-feedback');
+
+      try {
+        const response = await authorizedFetch(
+          QUOTE_CREATE_ENDPOINT,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              class_code: classCode,
+              products: ['SOAT', 'AP'],
+              session_id: validation.session_id,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          const message = (await extractErrorMessage(response)) || 'No pudimos generar la cotización.';
+          throw new Error(message);
+        }
+
+        const quote = await response.json().catch(() => ({}));
+        const successMessage = quote?.message || 'Cotización generada correctamente. Pronto te mostraremos más detalles.';
+        showFeedback(successMessage, 'success', 'quote-feedback');
+      } catch (error) {
+        console.error('Error al generar la cotización:', error);
+        showFeedback(error?.message || 'Ocurrió un problema al generar la cotización. Intenta nuevamente.', 'error', 'quote-feedback');
+      } finally {
+        if (submitButton) {
+          setButtonLoading(submitButton, false);
+        }
+      }
+    });
+  }
+
   function initCotizadorForm() {
     const form = document.querySelector('#cotizacion-form');
     if (!form) return;
+
+    clearValidationResult();
 
     const submitButton = form.querySelector('button[type="submit"]');
 
@@ -282,13 +516,21 @@
         }
 
         const data = await response.json().catch(() => ({}));
-        const documentLabel = documentTypeMap.get(documentTypeCode) || 'Documento';
-        const validationMessage = data?.message || 'Validación exitosa.';
 
-        showFeedback(
-          `${validationMessage} ${documentLabel}: ${documentNumber} · Placa ${licensePlate}. Continúa con tu cotización.`,
-          'success'
-        );
+        if (!data?.vehicle_info || !data?.session_id) {
+          throw new Error('No recibimos la información del vehículo para continuar con la cotización. Intenta nuevamente.');
+        }
+        const documentType = documentTypeMap.get(documentTypeCode);
+        const documentLabel = documentType?.name || 'Documento';
+
+        persistValidationResult(data, {
+          documentLabel,
+          documentTypeCode,
+          documentNumber,
+          licensePlate,
+        });
+
+        window.location.href = 'detalle.html';
       } catch (error) {
         console.error('Error al validar propietario:', error);
         showFeedback(error?.message || 'Ocurrió un error al validar los datos. Intenta nuevamente.', 'error');
@@ -304,6 +546,7 @@
     initStartButtons();
     initDocumentTypeSelect();
     initCotizadorForm();
+    initVehicleDetailPage();
   }
 
   if (document.readyState === 'loading') {
