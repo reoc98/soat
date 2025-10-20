@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOAT Digital | Detalle del vehículo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="detail">
+    <header class="navbar navbar--compact">
+      <div class="navbar__brand">
+        <span class="navbar__icon">🛡️</span>
+        <span class="navbar__title">SOAT Digital</span>
+      </div>
+      <a class="navbar__back" href="cotizador.html">← Volver al cotizador</a>
+    </header>
+
+    <main class="detail__layout" data-page="vehicle-detail">
+      <section class="detail__intro">
+        <div class="section-heading">
+          <span class="section-heading__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M5 15.5V11l1.6-4 3.4-2h4l3.4 2L19 11v4.5c.9 0 1 .6 1 1.5v3c0 .55-.45 1-1 1h-1a2.25 2.25 0 0 1-4.5 0H11a2.25 2.25 0 0 1-4.5 0H5c-.55 0-1-.45-1-1v-3c0-.9.1-1.5 1-1.5Zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm8.5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <div>
+            <h1>Confirma los datos y elige la clase para tu póliza</h1>
+            <p id="validation-message">
+              Validamos al propietario. Selecciona la clase que mejor se ajuste al uso del vehículo.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail__overview">
+        <div class="summary">
+          <div class="summary__cards">
+          <article class="summary-card">
+            <header class="summary-card__header">
+              <span class="summary-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-7 9c0-3.87 3.13-7 7-7s7 3.13 7 7v1H5v-1Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
+              <div>
+                <h2>Datos del propietario</h2>
+                <p class="summary-card__subtitle">Información básica del asegurado</p>
+              </div>
+            </header>
+            <dl class="summary-card__list">
+              <div>
+                <dt>Nombre completo</dt>
+                <dd id="owner-full-name">-</dd>
+              </div>
+                <div>
+                  <dt>Tipo de documento</dt>
+                  <dd id="owner-document-type">-</dd>
+                </div>
+                <div>
+                  <dt>Número de documento</dt>
+                  <dd id="owner-document">-</dd>
+                </div>
+              </dl>
+            </article>
+
+          <article class="summary-card">
+            <header class="summary-card__header">
+              <span class="summary-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M4 16v-2.5C4 11.57 4.57 11 5.5 11l1.6-4.27A2 2 0 0 1 9 5h6a2 2 0 0 1 1.9 1.28L18.5 11c.93 0 1.5.57 1.5 2.5V16a1 1 0 0 1-1 1h-.18a2.32 2.32 0 0 1-4.64 0H10.32a2.32 2.32 0 0 1-4.64 0H5a1 1 0 0 1-1-1Zm3.32 1.5a1.32 1.32 0 1 0 0-2.64 1.32 1.32 0 0 0 0 2.64Zm9.36 0a1.32 1.32 0 1 0 0-2.64 1.32 1.32 0 0 0 0 2.64ZM6 11h12l-1.2-3.2a1 1 0 0 0-.94-.63H8.14a1 1 0 0 0-.94.63L6 11Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
+              <div>
+                <h2>Datos del vehículo</h2>
+                <p class="summary-card__subtitle">Características principales</p>
+              </div>
+            </header>
+            <dl class="summary-card__list summary-card__list--two-columns">
+              <div>
+                <dt>Marca</dt>
+                <dd id="vehicle-brand">-</dd>
+              </div>
+                <div>
+                  <dt>Placa</dt>
+                  <dd id="vehicle-plate">-</dd>
+                </div>
+                <div>
+                  <dt>Modelo</dt>
+                  <dd id="vehicle-model">-</dd>
+                </div>
+                <div>
+                  <dt>Línea</dt>
+                  <dd id="vehicle-line">-</dd>
+                </div>
+                <div>
+                  <dt>Cilindraje</dt>
+                  <dd id="vehicle-cylinder">-</dd>
+                </div>
+                <div>
+                  <dt>Combustible</dt>
+                  <dd id="vehicle-fuel">-</dd>
+                </div>
+              </dl>
+            </article>
+          </div>
+        </div>
+
+        <aside class="soat-highlight" id="soat-highlight" aria-live="polite" hidden>
+          <span class="soat-highlight__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2 4.5 4.5v6.5c0 5.25 3.9 9.84 7.5 11 3.6-1.16 7.5-5.75 7.5-11V4.5L12 2Z" fill="currentColor" />
+            </svg>
+          </span>
+          <div class="soat-highlight__badge">Tarifa SOAT</div>
+          <p class="soat-highlight__amount" id="soat-price">$0</p>
+          <p class="soat-highlight__info" id="soat-plan-label">Selecciona una clase para ver tu tarifa.</p>
+          <dl class="soat-highlight__details" id="soat-plan-details"></dl>
+        </aside>
+      </section>
+
+      <section class="detail__homologations">
+        <div class="detail__homologations-header">
+          <div class="section-heading section-heading--inline">
+            <span class="section-heading__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 2a10 10 0 1 0 .01 20.01A10 10 0 0 0 12 2Zm0 3a7 7 0 0 1 6.93 6H13a1 1 0 0 0-1-1V5Zm-1 4a1 1 0 0 0-1 1H5.07A7 7 0 0 1 11 5v4Zm-6.93 3H10a1 1 0 0 0 1 1v4a7 7 0 0 1-6.93-5Zm8.93 5v-4a1 1 0 0 0 1-1h5.93A7 7 0 0 1 13 19Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2>Selecciona la clase de aseguramiento</h2>
+              <p>
+                Escoge una de las clases habilitadas para cotizar. Esta opción define las coberturas
+                disponibles para tu vehículo.
+              </p>
+            </div>
+          </div>
+          <div class="form__feedback" id="quote-feedback" role="status" aria-live="polite"></div>
+        </div>
+        <div class="homologations-grid" id="homologations-list"></div>
+      </section>
+
+      <section class="detail__products" id="products-section" hidden>
+        <div class="section-heading section-heading--inline">
+          <span class="section-heading__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 2 3 6.5 12 11l9-4.5L12 2Zm0 7-9 4.5L12 18l9-4.5L12 9Zm0 7-9 4.5L12 24l9-4.5L12 16Z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <div>
+            <h2>Coberturas disponibles</h2>
+            <p>Activa las coberturas opcionales que complementen tu seguridad.</p>
+          </div>
+        </div>
+        <div class="products-grid" id="products-list"></div>
+      </section>
+
+      <section class="detail__actions" id="detail-actions" hidden>
+        <div class="detail__actions-content">
+          <div class="detail__actions-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12h11.17l-3.58-3.59L13 7l6 6-6 6-1.41-1.41L16.17 13H5v-1Z" fill="currentColor" />
+            </svg>
+          </div>
+          <div>
+            <h2>¿Listo para continuar?</h2>
+            <p>
+              Revisa las coberturas seleccionadas y continúa para diligenciar la información de entrega y
+              pago de tu póliza.
+            </p>
+          </div>
+          <button class="button button--primary" id="detail-continue" disabled aria-disabled="true">
+            Continuar
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer footer--muted">
+      <p>¿Necesitas ayuda? Escríbenos a soporte@soatdigital.co o llama al 01 8000 123 456.</p>
+    </footer>
+
+    <div class="page-loader" id="page-loader" hidden>
+      <div class="page-loader__content">
+        <span class="page-loader__spinner" aria-hidden="true"></span>
+        <p class="page-loader__message">Generando tu cotización…</p>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
