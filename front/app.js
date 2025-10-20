@@ -8,6 +8,8 @@
   const QUOTE_CREATE_ENDPOINT = `${API_BASE_URL}/quote/create/`;
   const PRE_EXPEDITION_ENDPOINT = (sessionId) =>
     `${API_BASE_URL}/expedition/pre-expedition/${encodeURIComponent(sessionId)}`;
+  const EXPEDITION_ENDPOINT = (sessionId) =>
+    `${API_BASE_URL}/expedition/expedition/${encodeURIComponent(sessionId)}`;
   const LOGIN_CREDENTIALS = {
     email: 'test@rappi.com',
     password: 'tempralPass123',
@@ -22,6 +24,21 @@
     PAYMENT_STATUS: 'paymentStatus',
   };
 
+  const ICON_MARKUP = {
+    shield:
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2 4.5 4.5v6.5c0 5.25 3.9 9.84 7.5 11 3.6-1.16 7.5-5.75 7.5-11V4.5L12 2Z" fill="currentColor"/></svg>',
+    heart:
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 21.35 10.55 20C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 9.24 3 10.91 3.81 12 5.09 13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35Z" fill="currentColor"/></svg>',
+    layers:
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2 3 6.5 12 11l9-4.5L12 2Zm0 9-9 4.5L12 20l9-4.5L12 11Zm-9 7.5L12 22l9-3.5-9-4.5-9 4.5Z" fill="currentColor"/></svg>',
+    steering:
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2a10 10 0 1 0 .01 20.01A10 10 0 0 0 12 2Zm0 3a7 7 0 0 1 6.93 6H13a1 1 0 0 0-1-1V5Zm-1 4a1 1 0 0 0-1 1H5.07A7 7 0 0 1 11 5v4Zm-6.93 3H10a1 1 0 0 0 1 1v4a7 7 0 0 1-6.93-5Zm8.93 5v-4a1 1 0 0 0 1-1h5.93A7 7 0 0 1 13 19Z" fill="currentColor"/></svg>',
+    check:
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="m9.17 16.17-3.9-3.9-1.41 1.42 5.31 5.31L20.24 7.93l-1.41-1.41-9.66 9.65Z" fill="currentColor"/></svg>',
+    alert:
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2 1 21h22L12 2Zm1 15h-2v-2h2v2Zm0-4h-2V9h2v4Z" fill="currentColor"/></svg>',
+  };
+
   const defaultQuoteState = {
     classCode: null,
     classDescription: '',
@@ -34,6 +51,25 @@
 
   let authToken = sessionStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) || null;
   const documentTypeMap = new Map();
+
+  function getIconMarkup(name) {
+    return ICON_MARKUP[name] || ICON_MARKUP.layers;
+  }
+
+  function createIconElement(name, className = 'icon') {
+    const span = document.createElement('span');
+    span.className = className;
+    span.innerHTML = getIconMarkup(name);
+    span.setAttribute('aria-hidden', 'true');
+    return span;
+  }
+
+  function getProductIconMarkup(code) {
+    const normalized = (code || '').toUpperCase();
+    if (normalized === 'SOAT') return getIconMarkup('shield');
+    if (normalized === 'AP') return getIconMarkup('heart');
+    return getIconMarkup('layers');
+  }
 
   function storeToken(token) {
     authToken = token;
@@ -138,6 +174,16 @@
         element.disabled = false;
       }
       delete element.dataset.originalLabel;
+    }
+  }
+
+  function setStatusMessageText(element, message) {
+    if (!element) return;
+    const target = element.querySelector('[data-status-text]');
+    if (target) {
+      target.textContent = message;
+    } else {
+      element.textContent = message;
     }
   }
 
@@ -914,9 +960,14 @@
       code.className = 'homologation-card__code';
       code.textContent = `Código ${item.class_code}`;
 
+      const info = document.createElement('div');
+      info.className = 'homologation-card__content';
+      info.appendChild(title);
+      info.appendChild(code);
+
       card.appendChild(input);
-      card.appendChild(title);
-      card.appendChild(code);
+      card.appendChild(createIconElement('steering', 'homologation-card__icon'));
+      card.appendChild(info);
 
       container.appendChild(card);
     });
@@ -1026,6 +1077,12 @@
       badge.className = 'product-card__badge';
       badge.textContent = product.mandatory ? 'Incluido' : 'Opcional';
 
+      const icon = document.createElement('span');
+      icon.className = 'product-card__icon';
+      icon.innerHTML = getProductIconMarkup(product.product_code);
+      icon.setAttribute('aria-hidden', 'true');
+
+      header.appendChild(icon);
       header.appendChild(title);
       header.appendChild(badge);
       card.appendChild(header);
@@ -1493,7 +1550,7 @@
 
     const statusMessage = document.getElementById('payment-status-message');
     if (statusMessage) {
-      statusMessage.textContent = 'Procesando tu pago de forma segura…';
+      setStatusMessageText(statusMessage, 'Procesando tu pago de forma segura…');
     }
 
     setPaymentStatus('processing', { startedAt: Date.now() });
@@ -1505,13 +1562,57 @@
 
     setTimeout(() => {
       if (statusMessage) {
-        statusMessage.textContent = '¡Pago aprobado! Preparando tu póliza…';
+        setStatusMessageText(statusMessage, '¡Pago aprobado! Preparando tu póliza…');
       }
       setPaymentStatus('completed', { completedAt: Date.now() });
       setTimeout(() => {
         window.location.href = 'exito.html';
       }, 900);
     }, 2600);
+  }
+
+  function updateSuccessExpeditionStatus(state = 'loading', message) {
+    const container = document.getElementById('success-expedition');
+    const messageElement = document.getElementById('success-expedition-message');
+    if (container) {
+      container.dataset.state = state;
+    }
+    if (messageElement && message) {
+      messageElement.textContent = message;
+    }
+  }
+
+  async function triggerExpedition(sessionId) {
+    if (!sessionId) {
+      return;
+    }
+
+    updateSuccessExpeditionStatus(
+      'loading',
+      'Estamos expidiendo tu póliza. En unos minutos llegará a tu correo electrónico.'
+    );
+
+    try {
+      const response = await authorizedFetch(EXPEDITION_ENDPOINT(sessionId), {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        const message = (await extractErrorMessage(response)) || 'No pudimos confirmar la expedición.';
+        throw new Error(message);
+      }
+
+      const payload = await response.json().catch(() => ({}));
+      const successMessage =
+        payload?.message || 'Tu póliza está siendo enviada a tu correo. Revisa en unos minutos.';
+      updateSuccessExpeditionStatus('success', successMessage);
+    } catch (error) {
+      console.error('Error al expedir la póliza:', error);
+      updateSuccessExpeditionStatus(
+        'error',
+        error?.message || 'No pudimos confirmar la expedición. Intenta más tarde o contáctanos.'
+      );
+    }
   }
 
   function initSuccessPage() {
@@ -1570,6 +1671,8 @@
     renderSelectedProducts('success-products-list', null, {
       emptyMessage: 'No encontramos productos para mostrar.',
     });
+
+    triggerExpedition(validation.session_id);
 
     const finishButton = document.getElementById('success-finish');
     if (finishButton) {

@@ -27,6 +27,19 @@ Para levantar el sitio en `http://localhost:8080`:
 docker run --rm -p 8080:80 soat-front
 ```
 
+Si prefieres que el contenedor quede ejecutándose en segundo plano, usa el modo *detached* y asígnale un nombre para poder
+detenerlo fácilmente después:
+
+```bash
+docker run -d --rm --name soat-front-web -p 8080:80 soat-front
+```
+
+Cuando quieras detenerlo bastará con:
+
+```bash
+docker stop soat-front-web
+```
+
 Luego abre tu navegador en:
 - `http://localhost:8080/index.html` para la página de inicio.
 - `http://localhost:8080/cotizador.html` para el formulario.

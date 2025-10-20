@@ -23,6 +23,14 @@
 
     <main class="payment" data-page="payment-mock">
       <section class="payment__hero">
+        <span class="payment__hero-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M4 6h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2v2h16V8H4Zm0 4v5h16v-5H4Zm3 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+              fill="currentColor"
+            />
+          </svg>
+        </span>
         <h1>Estamos procesando tu pago</h1>
         <p>
           Mantenemos tus datos seguros mientras confirmamos la transacción. Este paso puede tardar unos segundos.
@@ -31,17 +39,47 @@
 
       <section class="payment__card">
         <div class="payment__info">
-          <div>
-            <h2>Titular</h2>
-            <p id="payment-owner-name">-</p>
+          <div class="info-block">
+            <span class="info-block__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-7 9c0-3.87 3.13-7 7-7s7 3.13 7 7v1H5v-1Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2>Titular</h2>
+              <p id="payment-owner-name">-</p>
+            </div>
           </div>
-          <div>
-            <h2>Vehículo</h2>
-            <p>Placa <span id="payment-plate">-</span></p>
+          <div class="info-block">
+            <span class="info-block__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M4 16v-2.5C4 11.57 4.57 11 5.5 11l1.6-4.27A2 2 0 0 1 9 5h6a2 2 0 0 1 1.9 1.28L18.5 11c.93 0 1.5.57 1.5 2.5V16a1 1 0 0 1-1 1h-.18a2.32 2.32 0 0 1-4.64 0H10.32a2.32 2.32 0 0 1-4.64 0H5a1 1 0 0 1-1-1Zm3.32 1.5a1.32 1.32 0 1 0 0-2.64 1.32 1.32 0 0 0 0 2.64Zm9.36 0a1.32 1.32 0 1 0 0-2.64 1.32 1.32 0 0 0 0 2.64ZM6 11h12l-1.2-3.2a1 1 0 0 0-.94-.63H8.14a1 1 0 0 0-.94.63L6 11Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2>Vehículo</h2>
+              <p>Placa <span id="payment-plate">-</span></p>
+            </div>
           </div>
-          <div>
-            <h2>Total de la compra</h2>
-            <p class="payment__total" id="payment-total">$0</p>
+          <div class="info-block">
+            <span class="info-block__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 3 4 7v6c0 5 3.5 9.74 8 11 4.5-1.26 8-6 8-11V7l-8-4Zm0 2.18 6 3v4.82c0 3.73-2.55 7.62-6 8.77-3.45-1.15-6-5.04-6-8.77V8.18l6-3ZM11 9h2v4h-2V9Zm0 5h2v2h-2v-2Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2>Total de la compra</h2>
+              <p class="payment__total" id="payment-total">$0</p>
+            </div>
           </div>
         </div>
 
@@ -49,15 +87,33 @@
           <div class="payment-progress" id="payment-progress">
             <span class="payment-progress__bar"></span>
           </div>
-          <p class="payment__status-message" id="payment-status-message">
-            Preparando todo para tu póliza…
-          </p>
+          <div class="payment__status-message" id="payment-status-message" aria-live="polite">
+            <span class="payment__status-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2 4.5 4.5v6.5c0 5.25 3.9 9.84 7.5 11 3.6-1.16 7.5-5.75 7.5-11V4.5L12 2Z" fill="currentColor" />
+              </svg>
+            </span>
+            <span data-status-text>Preparando todo para tu póliza…</span>
+          </div>
         </div>
       </section>
 
       <section class="payment__tips">
-        <h2>¿Qué sigue?</h2>
-        <ul>
+        <div class="section-heading section-heading--inline">
+          <span class="section-heading__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M5 4h14v2H5V4Zm0 4h9v2H5V8Zm0 4h14v2H5v-2Zm0 4h9v2H5v-2Zm11.59-2.41 1.41-1.41L21 16l-2.99 2.82-1.42-1.41L17.17 17H15v-2h2.17Z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <div>
+            <h2>¿Qué sigue?</h2>
+            <p>Conoce los pasos siguientes mientras finalizamos la transacción.</p>
+          </div>
+        </div>
+        <ul class="payment__tips-list">
           <li>Generaremos tu póliza inmediatamente después de recibir la confirmación del pago.</li>
           <li>
             Te enviaremos un correo con el comprobante y copia de la póliza digital al finalizar el proceso.
