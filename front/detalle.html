@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOAT Digital | Detalle del vehículo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="detail">
+    <header class="navbar navbar--compact">
+      <div class="navbar__brand">
+        <span class="navbar__icon">🛡️</span>
+        <span class="navbar__title">SOAT Digital</span>
+      </div>
+      <a class="navbar__back" href="cotizador.html">← Volver al cotizador</a>
+    </header>
+
+    <main class="detail__layout" data-page="vehicle-detail">
+      <section class="detail__intro">
+        <h1>Confirma los datos y elige la clase para tu póliza</h1>
+        <p id="validation-message">
+          Validamos al propietario. Selecciona la clase que mejor se ajuste al uso del vehículo.
+        </p>
+      </section>
+
+      <section class="detail__overview">
+        <div class="summary">
+          <div class="summary__cards">
+            <article class="summary-card">
+              <h2>Datos del propietario</h2>
+              <dl class="summary-card__list">
+                <div>
+                  <dt>Nombre completo</dt>
+                  <dd id="owner-full-name">-</dd>
+                </div>
+                <div>
+                  <dt>Tipo de documento</dt>
+                  <dd id="owner-document-type">-</dd>
+                </div>
+                <div>
+                  <dt>Número de documento</dt>
+                  <dd id="owner-document">-</dd>
+                </div>
+              </dl>
+            </article>
+
+            <article class="summary-card">
+              <h2>Datos del vehículo</h2>
+              <dl class="summary-card__list summary-card__list--two-columns">
+                <div>
+                  <dt>Marca</dt>
+                  <dd id="vehicle-brand">-</dd>
+                </div>
+                <div>
+                  <dt>Placa</dt>
+                  <dd id="vehicle-plate">-</dd>
+                </div>
+                <div>
+                  <dt>Modelo</dt>
+                  <dd id="vehicle-model">-</dd>
+                </div>
+                <div>
+                  <dt>Línea</dt>
+                  <dd id="vehicle-line">-</dd>
+                </div>
+                <div>
+                  <dt>Cilindraje</dt>
+                  <dd id="vehicle-cylinder">-</dd>
+                </div>
+                <div>
+                  <dt>Combustible</dt>
+                  <dd id="vehicle-fuel">-</dd>
+                </div>
+              </dl>
+            </article>
+          </div>
+        </div>
+
+        <aside class="soat-highlight" id="soat-highlight" aria-live="polite" hidden>
+          <div class="soat-highlight__badge">Tarifa SOAT</div>
+          <p class="soat-highlight__amount" id="soat-price">$0</p>
+          <p class="soat-highlight__info" id="soat-plan-label">Selecciona una clase para ver tu tarifa.</p>
+          <dl class="soat-highlight__details" id="soat-plan-details"></dl>
+        </aside>
+      </section>
+
+      <section class="detail__homologations">
+        <div class="detail__homologations-header">
+          <div>
+            <h2>Selecciona la clase de aseguramiento</h2>
+            <p>
+              Escoge una de las clases habilitadas para cotizar. Esta opción define las coberturas
+              disponibles para tu vehículo.
+            </p>
+          </div>
+          <div class="form__feedback" id="quote-feedback" role="status" aria-live="polite"></div>
+        </div>
+        <div class="homologations-grid" id="homologations-list"></div>
+      </section>
+
+      <section class="detail__products" id="products-section" hidden>
+        <h2>Coberturas disponibles</h2>
+        <div class="products-grid" id="products-list"></div>
+      </section>
+
+      <section class="detail__actions" id="detail-actions" hidden>
+        <div class="detail__actions-content">
+          <div>
+            <h2>¿Listo para continuar?</h2>
+            <p>
+              Revisa las coberturas seleccionadas y continúa para diligenciar la información de entrega y
+              pago de tu póliza.
+            </p>
+          </div>
+          <button class="button button--primary" id="detail-continue" disabled aria-disabled="true">
+            Continuar
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer footer--muted">
+      <p>¿Necesitas ayuda? Escríbenos a soporte@soatdigital.co o llama al 01 8000 123 456.</p>
+    </footer>
+
+    <div class="page-loader" id="page-loader" hidden>
+      <div class="page-loader__content">
+        <span class="page-loader__spinner" aria-hidden="true"></span>
+        <p class="page-loader__message">Generando tu cotización…</p>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

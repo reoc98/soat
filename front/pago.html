@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOAT Digital | Procesando pago</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="payment-page">
+    <header class="navbar navbar--compact">
+      <div class="navbar__brand">
+        <span class="navbar__icon">🛡️</span>
+        <span class="navbar__title">SOAT Digital</span>
+      </div>
+      <a class="navbar__back" href="resumen.html">← Volver al resumen</a>
+    </header>
+
+    <main class="payment" data-page="payment-mock">
+      <section class="payment__hero">
+        <h1>Estamos procesando tu pago</h1>
+        <p>
+          Mantenemos tus datos seguros mientras confirmamos la transacción. Este paso puede tardar unos segundos.
+        </p>
+      </section>
+
+      <section class="payment__card">
+        <div class="payment__info">
+          <div>
+            <h2>Titular</h2>
+            <p id="payment-owner-name">-</p>
+          </div>
+          <div>
+            <h2>Vehículo</h2>
+            <p>Placa <span id="payment-plate">-</span></p>
+          </div>
+          <div>
+            <h2>Total de la compra</h2>
+            <p class="payment__total" id="payment-total">$0</p>
+          </div>
+        </div>
+
+        <div class="payment__status">
+          <div class="payment-progress" id="payment-progress">
+            <span class="payment-progress__bar"></span>
+          </div>
+          <p class="payment__status-message" id="payment-status-message">
+            Preparando todo para tu póliza…
+          </p>
+        </div>
+      </section>
+
+      <section class="payment__tips">
+        <h2>¿Qué sigue?</h2>
+        <ul>
+          <li>Generaremos tu póliza inmediatamente después de recibir la confirmación del pago.</li>
+          <li>
+            Te enviaremos un correo con el comprobante y copia de la póliza digital al finalizar el proceso.
+          </li>
+          <li>Puedes cerrar esta ventana cuando veas la confirmación final.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer footer--muted">
+      <p>¿Necesitas ayuda? Escríbenos a soporte@soatdigital.co o llama al 01 8000 123 456.</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

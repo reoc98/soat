@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOAT Digital | Póliza expedida</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="success-page">
+    <header class="navbar navbar--compact">
+      <div class="navbar__brand">
+        <span class="navbar__icon">🛡️</span>
+        <span class="navbar__title">SOAT Digital</span>
+      </div>
+      <a class="navbar__back" href="index.html">← Ir al inicio</a>
+    </header>
+
+    <main class="success" data-page="success">
+      <section class="success__hero">
+        <div class="success__icon" aria-hidden="true">✅</div>
+        <h1>¡Tu póliza fue expedida con éxito!</h1>
+        <p>
+          Hemos expedido tu póliza y ya está disponible para descarga. Encontrarás una copia en tu correo junto con
+          los detalles de pago y cobertura.
+        </p>
+      </section>
+
+      <section class="success__details">
+        <div class="success__highlight">
+          <div>
+            <h2>Titular</h2>
+            <p id="success-owner-name">-</p>
+          </div>
+          <div>
+            <h2>Vehículo asegurado</h2>
+            <p>Placa <span id="success-plate">-</span> · <span id="success-class">-</span></p>
+          </div>
+          <div>
+            <h2>Total pagado</h2>
+            <p class="success__total" id="success-total">$0</p>
+          </div>
+        </div>
+
+        <div class="success__products">
+          <div class="success__products-header">
+            <h2>Coberturas activas</h2>
+            <p>Estos son los productos incluidos en tu póliza.</p>
+          </div>
+          <ul class="summary-products__list success__products-list" id="success-products-list"></ul>
+        </div>
+
+        <div class="success__meta">
+          <div>
+            <span>ID de sesión</span>
+            <strong id="success-session">-</strong>
+          </div>
+          <div>
+            <span>Fecha de expedición</span>
+            <strong id="success-date">Hoy</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="success__actions">
+        <button class="button button--primary" id="success-finish">Finalizar</button>
+        <p class="success__hint">
+          Si necesitas descargar de nuevo la póliza o hacer un cambio, podrás hacerlo desde tu correo o contactando al
+          equipo de soporte.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer footer--muted">
+      <p>¿Necesitas ayuda? Escríbenos a soporte@soatdigital.co o llama al 01 8000 123 456.</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
