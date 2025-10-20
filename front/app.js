@@ -1,43 +1,16 @@
-const steps = Array.from(document.querySelectorAll('.step'));
-const contents = Array.from(document.querySelectorAll('[data-step-content]'));
-const nextBtn = document.querySelector('[data-action="next"]');
-const prevBtn = document.querySelector('[data-action="prev"]');
+const form = document.querySelector('#cotizacion-form');
 
-let currentStep = 1;
+if (form) {
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-function updateStep(newStep) {
-  currentStep = Math.max(1, Math.min(steps.length, newStep));
+    const formData = new FormData(form);
+    const placa = formData.get('placa');
+    const documentType = formData.get('documentType');
+    const documentNumber = formData.get('documentNumber');
 
-  steps.forEach((step, index) => {
-    const stepNumber = index + 1;
-    step.classList.toggle('active', stepNumber === currentStep);
-    step.classList.toggle('completed', stepNumber < currentStep);
+    const resumen = `Placa: ${placa}\nDocumento (${documentType?.toUpperCase()}): ${documentNumber}`;
+
+    window.alert(`¡Perfecto! Hemos recibido tus datos:\n\n${resumen}\n\nUn asesor te contactará para continuar el proceso.`);
   });
-
-  contents.forEach((content) => {
-    const contentStep = Number(content.dataset.stepContent);
-    content.hidden = contentStep !== currentStep;
-  });
-
-  prevBtn.disabled = currentStep === 1;
-  nextBtn.textContent = currentStep === steps.length ? 'Finalizar' : 'Continuar';
 }
-
-nextBtn?.addEventListener('click', () => {
-  if (currentStep < steps.length) {
-    updateStep(currentStep + 1);
-  }
-});
-
-prevBtn?.addEventListener('click', () => {
-  updateStep(currentStep - 1);
-});
-
-steps.forEach((step) => {
-  step.addEventListener('click', () => {
-    const stepNumber = Number(step.dataset.step);
-    updateStep(stepNumber);
-  });
-});
-
-updateStep(currentStep);

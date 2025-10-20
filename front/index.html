@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SOAT Digital | Compra tu seguro obligatorio</title>
+    <title>SOAT Digital | Compra tu SOAT en línea</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,331 +12,110 @@
       rel="stylesheet"
     />
   </head>
-  <body>
-    <header class="hero">
-      <nav class="navbar">
-        <div class="logo">
-          <span class="logo-icon">🛡️</span>
-          <span class="logo-text">SOAT Digital</span>
-        </div>
-        <a class="nav-button" href="#cotizador">Comenzar ahora</a>
-      </nav>
-      <div class="hero-content">
-        <h1>Compra tu SOAT en minutos</h1>
-        <p>
-          Rápido, seguro y 100% digital. Valida tu vehículo y obtén tu seguro obligatorio al instante.
-        </p>
-        <div class="hero-actions">
-          <a class="primary" href="#cotizador">Comenzar ahora</a>
-          <button class="ghost" type="button">Conoce beneficios</button>
-        </div>
+  <body class="home">
+    <header class="navbar">
+      <div class="navbar__brand">
+        <span class="navbar__icon">🛡️</span>
+        <span class="navbar__title">SOAT Digital</span>
       </div>
+      <nav class="navbar__links">
+        <a href="#beneficios">Beneficios</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a class="button button--ghost" href="cotizador.html">Inicia sesión</a>
+        <a class="button" href="cotizador.html">Comenzar</a>
+      </nav>
     </header>
 
     <main>
-      <section class="why-us">
-        <h2>¿Por qué elegirnos?</h2>
-        <div class="why-grid">
-          <article class="card">
-            <h3>Rápido</h3>
-            <p>Emitimos tu póliza en menos de 5 minutos y la enviamos por correo electrónico.</p>
+      <section class="hero">
+        <div class="hero__content">
+          <p class="hero__tag">SOAT + AP + RCE</p>
+          <h1>Tu SOAT digital en minutos</h1>
+          <p class="hero__description">
+            Protege tu vehículo y a los que más quieres con un proceso rápido, seguro y 100% en línea.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="cotizador.html">Comenzar ahora</a>
+            <a class="button button--ghost" href="#beneficios">Conoce más</a>
+          </div>
+          <dl class="hero__metrics">
+            <div>
+              <dt>+50K</dt>
+              <dd>Clientes atendidos</dd>
+            </div>
+            <div>
+              <dt>5 min</dt>
+              <dd>Tiempo promedio de emisión</dd>
+            </div>
+            <div>
+              <dt>24/7</dt>
+              <dd>Atención disponible</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="hero__card">
+          <h2>Simula tu compra</h2>
+          <p>Obtén tu póliza y coberturas complementarias sin salir de casa.</p>
+          <ul>
+            <li>SOAT vigente y certificado</li>
+            <li>Cobertura AP por hasta $30MM</li>
+            <li>RCE hasta $50MM y asistencia jurídica</li>
+          </ul>
+          <a class="button button--primary" href="cotizador.html">Empezar cotización</a>
+        </div>
+      </section>
+
+      <section id="beneficios" class="benefits">
+        <h2>Beneficios de comprar con nosotros</h2>
+        <div class="benefits__grid">
+          <article class="benefit">
+            <h3>Proceso simple</h3>
+            <p>Solo necesitas placa, tipo y número de documento para iniciar.</p>
           </article>
-          <article class="card">
-            <h3>Seguro</h3>
-            <p>Aliados de las principales aseguradoras del país. Tu información siempre protegida.</p>
+          <article class="benefit">
+            <h3>Pagos seguros</h3>
+            <p>Pasarela certificada con múltiples medios de pago disponibles.</p>
           </article>
-          <article class="card">
-            <h3>Confiable</h3>
-            <p>Más de 50.000 clientes confían en nosotros cada año para adquirir su SOAT.</p>
+          <article class="benefit">
+            <h3>Todo en un solo lugar</h3>
+            <p>Incluye coberturas de Accidentes Personales (AP) y RCE en tu compra.</p>
+          </article>
+          <article class="benefit">
+            <h3>Soporte experto</h3>
+            <p>Equipo especializado listo para ayudarte en cualquier paso.</p>
           </article>
         </div>
       </section>
 
-      <section id="cotizador" class="wizard">
-        <header class="wizard-header">
-          <div class="wizard-title">
-            <span class="logo-icon">🛡️</span>
-            <div>
-              <h2>Proceso de compra</h2>
-              <p>Completa los pasos para emitir tu SOAT, AP y RCE en un solo lugar.</p>
-            </div>
-          </div>
-          <div class="stepper" aria-label="Progreso del proceso de compra">
-            <div class="step" data-step="1">
-              <span class="step-index">1</span>
-              <span class="step-label">Datos</span>
-            </div>
-            <div class="step" data-step="2">
-              <span class="step-index">2</span>
-              <span class="step-label">Vehículo</span>
-            </div>
-            <div class="step" data-step="3">
-              <span class="step-index">3</span>
-              <span class="step-label">Producto</span>
-            </div>
-            <div class="step" data-step="4">
-              <span class="step-index">4</span>
-              <span class="step-label">Pago</span>
-            </div>
-            <div class="step" data-step="5">
-              <span class="step-index">5</span>
-              <span class="step-label">Confirmación</span>
-            </div>
-          </div>
-        </header>
+      <section id="como-funciona" class="steps">
+        <h2>¿Cómo funciona?</h2>
+        <ol class="steps__list">
+          <li>
+            <strong>1. Inicia tu solicitud.</strong>
+            Ingresa los datos básicos del vehículo y propietario.
+          </li>
+          <li>
+            <strong>2. Revisa las coberturas.</strong>
+            Conoce el detalle del SOAT junto con los complementos AP y RCE.
+          </li>
+          <li>
+            <strong>3. Finaliza el pago.</strong>
+            Recibe tu póliza digital y soportes adicionales en tu correo.
+          </li>
+        </ol>
+      </section>
 
-        <section class="wizard-body">
-          <div class="step-content" data-step-content="1">
-            <h3>Datos del propietario</h3>
-            <p>Ingresa la información necesaria para validar la propiedad del vehículo.</p>
-            <form class="form-grid">
-              <label>
-                Tipo de documento
-                <select>
-                  <option value="">Selecciona</option>
-                  <option value="cc">Cédula de ciudadanía</option>
-                  <option value="ce">Cédula de extranjería</option>
-                  <option value="nit">NIT</option>
-                </select>
-              </label>
-              <label>
-                Número de documento
-                <input type="text" placeholder="1234567890" />
-              </label>
-              <label>
-                Placa del vehículo
-                <input type="text" placeholder="ABC123" />
-              </label>
-              <label>
-                Correo electrónico
-                <input type="email" placeholder="correo@ejemplo.com" />
-              </label>
-              <label>
-                Dirección
-                <input type="text" placeholder="Calle 123 #45-67" />
-              </label>
-              <label>
-                Teléfono
-                <input type="tel" placeholder="3001234567" />
-              </label>
-              <label class="checkbox">
-                <input type="checkbox" />
-                Verifico que todos los datos son correctos
-              </label>
-            </form>
-          </div>
-
-          <div class="step-content" data-step-content="2" hidden>
-            <h3>Selecciona la clase de tu vehículo</h3>
-            <p>Elige la categoría que corresponde a tu vehículo.</p>
-            <div class="vehicle-grid">
-              <article class="vehicle-card">
-                <h4>Automóvil</h4>
-                <p>Vehículos particulares hasta 5 pasajeros.</p>
-                <button type="button">Seleccionar</button>
-              </article>
-              <article class="vehicle-card">
-                <h4>Motocicleta</h4>
-                <p>Motos y vehículos de dos ruedas.</p>
-                <button type="button">Seleccionar</button>
-              </article>
-              <article class="vehicle-card">
-                <h4>Camioneta</h4>
-                <p>SUVs y camionetas de carga liviana.</p>
-                <button type="button">Seleccionar</button>
-              </article>
-              <article class="vehicle-card">
-                <h4>Bus / Microbús</h4>
-                <p>Vehículos de transporte público.</p>
-                <button type="button">Seleccionar</button>
-              </article>
-            </div>
-          </div>
-
-          <div class="step-content" data-step-content="3" hidden>
-            <h3>Elige tu plan de SOAT</h3>
-            <p>Selecciona el plan que mejor se adapta a tus necesidades.</p>
-            <div class="plans">
-              <article class="plan-card">
-                <header>
-                  <h4>SOAT Básico</h4>
-                  <span class="price">$285.000</span>
-                </header>
-                <ul>
-                  <li>Cobertura de lesiones personales</li>
-                  <li>Asistencia vial básica</li>
-                  <li>Gastos médicos hasta 800 SMMLV</li>
-                </ul>
-                <button type="button">Seleccionar este plan</button>
-              </article>
-              <article class="plan-card recommended">
-                <header>
-                  <div>
-                    <span class="tag">Recomendado</span>
-                    <h4>SOAT Plus</h4>
-                  </div>
-                  <span class="price">$385.000</span>
-                </header>
-                <ul>
-                  <li>Todo el SOAT Básico</li>
-                  <li>Asistencia vial 24/7</li>
-                  <li>Grúa incluida (hasta 50km)</li>
-                  <li>Incluye AP (Accidentes Personales)</li>
-                  <li>Incluye RCE (Responsabilidad Civil)</li>
-                </ul>
-                <button type="button">Seleccionar este plan</button>
-              </article>
-              <article class="plan-card premium">
-                <header>
-                  <h4>SOAT Premium</h4>
-                  <span class="price">$485.000</span>
-                </header>
-                <ul>
-                  <li>Beneficios exclusivos y asistencia VIP</li>
-                  <li>Carro sustituto hasta por 7 días</li>
-                  <li>Indemnización ampliada</li>
-                </ul>
-                <button type="button">Seleccionar este plan</button>
-              </article>
-            </div>
-          </div>
-
-          <div class="step-content" data-step-content="4" hidden>
-            <h3>Confirma tu compra</h3>
-            <p>Revisa los detalles antes de proceder al pago.</p>
-            <div class="summary-grid">
-              <article class="summary-card">
-                <header>
-                  <h4>Información del vehículo</h4>
-                  <span class="badge">Automóvil</span>
-                </header>
-                <dl>
-                  <div>
-                    <dt>Placa</dt>
-                    <dd>DSF5234</dd>
-                  </div>
-                  <div>
-                    <dt>Documento</dt>
-                    <dd>CC 1234</dd>
-                  </div>
-                  <div>
-                    <dt>Teléfono</dt>
-                    <dd>3103459134</dd>
-                  </div>
-                  <div>
-                    <dt>Correo</dt>
-                    <dd>fabianlozano044@gmail.com</dd>
-                  </div>
-                </dl>
-              </article>
-
-              <article class="summary-card">
-                <header>
-                  <h4>Producto seleccionado</h4>
-                  <span class="badge success">SOAT Plus</span>
-                </header>
-                <ul>
-                  <li>Incluye AP con cobertura hasta $30MM</li>
-                  <li>Incluye RCE hasta $50MM</li>
-                  <li>Asesoría jurídica 24/7</li>
-                  <li>Asistencia en carretera</li>
-                </ul>
-              </article>
-
-              <aside class="summary-card total">
-                <header>
-                  <h4>Resumen</h4>
-                </header>
-                <dl>
-                  <div>
-                    <dt>SOAT Plus</dt>
-                    <dd>$385.000</dd>
-                  </div>
-                  <div>
-                    <dt>IVA</dt>
-                    <dd>$0</dd>
-                  </div>
-                  <div>
-                    <dt>AP + RCE</dt>
-                    <dd>Incluido</dd>
-                  </div>
-                </dl>
-                <div class="total-amount">
-                  <span>Total</span>
-                  <strong>$385.000</strong>
-                </div>
-                <button type="button" class="primary">Pagar ahora</button>
-              </aside>
-            </div>
-          </div>
-
-          <div class="step-content" data-step-content="5" hidden>
-            <div class="success">
-              <div class="success-icon">✔</div>
-              <h3>¡Compra exitosa!</h3>
-              <p>Tu SOAT ha sido expedido correctamente.</p>
-            </div>
-            <div class="summary-grid">
-              <article class="summary-card">
-                <header>
-                  <h4>Datos de expedición</h4>
-                </header>
-                <dl>
-                  <div>
-                    <dt>Número de expedición</dt>
-                    <dd>EXP-0107845</dd>
-                  </div>
-                  <div>
-                    <dt>Fecha de expedición</dt>
-                    <dd>19 de octubre de 2025</dd>
-                  </div>
-                  <div>
-                    <dt>Placa</dt>
-                    <dd>DSF5234</dd>
-                  </div>
-                  <div>
-                    <dt>Clase</dt>
-                    <dd>Automóvil</dd>
-                  </div>
-                  <div>
-                    <dt>Producto</dt>
-                    <dd>SOAT Plus</dd>
-                  </div>
-                  <div>
-                    <dt>Vigencia</dt>
-                    <dd>1 año</dd>
-                  </div>
-                </dl>
-                <div class="actions">
-                  <button type="button" class="primary">Descargar SOAT (PDF)</button>
-                  <button type="button" class="ghost">Ver detalles de póliza</button>
-                </div>
-              </article>
-              <article class="summary-card">
-                <header>
-                  <h4>¿Necesitas ayuda?</h4>
-                </header>
-                <p>
-                  Si tienes alguna duda sobre tu póliza o necesitas soporte adicional, nuestro equipo está disponible 24/7 para asistirte.
-                </p>
-                <button type="button">Contactar soporte</button>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <footer class="wizard-footer">
-          <button type="button" class="ghost" data-action="prev">Atrás</button>
-          <button type="button" class="primary" data-action="next">Continuar</button>
-        </footer>
+      <section class="cta">
+        <div class="cta__content">
+          <h2>Listo para asegurar tu vehículo</h2>
+          <p>Comienza ahora y recibe tu póliza en cuestión de minutos.</p>
+        </div>
+        <a class="button button--light" href="cotizador.html">Comenzar ahora</a>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <p>© 2025 SOAT Digital. Powered by Seguros Mundial.</p>
-      <p>Plataforma desarrollada para simplificar la emisión de tu seguro obligatorio.</p>
+    <footer class="footer">
+      <p>© 2024 SOAT Digital. Todos los derechos reservados.</p>
     </footer>
-
-    <script src="app.js"></script>
   </body>
 </html>
